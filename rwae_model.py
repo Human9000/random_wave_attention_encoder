@@ -11,7 +11,7 @@ if not os.pth.isfile("dll/wre_bnlved.dll"):
 # 加载dll
 libwre = CDLL("dll/wre_bnlved.dll")
 
-#
+# wre 生成器
 def make_wre(b, l, gama):  # b, l
     n = int(gama*l)
     if n<2: n=2
@@ -47,7 +47,7 @@ class ResDoubleConv3d(torch.nn.Module):
         y2 = self.c2(self.relu(self.normal(y1)))
         return y1+y2
 
-
+# 自注意力机制
 class Attention(nn.Module):
     def __init__(self, dim, heads=8, dim_head=64):
         super().__init__()
@@ -70,7 +70,7 @@ class Attention(nn.Module):
         out = rearrange(out, 'b h n d -> b n (h d)')
         return self.to_out(out)
 
-
+# 奇异值分解的波化注意力
 class SvdWaveAttention(torch.nn.Module):
     def __init__(self, c, q=2, heads=8, dim_head=64) -> None:
         super().__init__()
@@ -131,7 +131,7 @@ class SvdWaveAttention(torch.nn.Module):
         y = (y3 + y2 + y1) / 3
         return y
 
-
+# 波随机编码器
 class WaveRandomEncoder(nn.Module):
     def __init__(self, gama) -> None:
         super().__init__()
