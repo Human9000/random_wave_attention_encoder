@@ -5,7 +5,9 @@ import numpy as np
 from ctypes import CDLL, c_bool, c_float, c_void_p
 import os
 
-
+if not os.pth.isfile("dll/wre_bnlved.dll"):
+    os.system('gcc -fPIC -shared -o dll/wre_bnlved.dll cpp/wre_bnlved.cpp')
+    
 # 加载dll
 libwre = CDLL("dll/wre_bnlved.dll")
 
