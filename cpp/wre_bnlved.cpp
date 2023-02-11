@@ -1,4 +1,4 @@
-// cmd : gcc -fPIC -shared -o dll/wre.dll cpp/wre.cpp
+// cmd : gcc -fPIC -shared -o dll/wre_bnlved.dll cpp/wre_bnlved.cpp
 extern "C" {
     void random_en_de(int B, int N, int L, bool *mask_vector, float *mae_en, float *mae_de);
     int bnl(int B, int N, int L, int b,  int n, int l);
@@ -17,7 +17,7 @@ void random_en_de(int B, int N, int L, bool *mask_vector, float *mae_en, float *
     int l = 0, n = 0, b = 0;
     int  p = 0, q = L - 1; // 前项指针，后向指针
     float sum = 0;
-    // mask_vector; // 随机打乱
+    // mask_vector; // 设置时间戳
     srand ( unsigned ( time(0) ) );
 
     for(b=0; b<B; b++){
