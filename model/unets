@@ -1,0 +1,134 @@
+from torch import nn
+from torch.nn import functional as F
+from model.rwae import *
+
+
+class UNetDoubleConv(nn.Module):
+    def __init__(self, inc=1, outc=2, SOFTMAX=False):
+        super().__init__()
+        self.c1 =  nn.Conv3d(inc, outc, 3, stride=1, padding=1)
+        self.c2 =  nn.Conv3d(outc, outc, 3, stride=1, padding=1)
+        self.SOFTMAX = SOFTMAX
+         
+    def forward(self, x):
+        y1 = self.c1(x)
+        y1 = F.relu(F.instance_norm(y1))
+        y = self.c2(y1)
+        if self.SOFTMAX:
+            y = F.softmax(y, dim=1)
+        else:
+            y = F.relu(F.instance_norm(y))
+        return y
+        
+
+    
+class UNet(nn.Module):
+    def __init__(self, inc=1, outc=2, training=True):
+        super().__init__()
+        self.training = training
+
+        self.encoders = nn.ModuleList([
+            UNetDoubleConv(inc,32),
+            UNetDoubleConv(32,32),
+            UNetDoubleConv(32,32),
+            UNetDoubleConv(32,32),
+            UNetDoubleConv(32,32),
+        ])
+        
+        self.decoders = nn.ModuleList([
+            UNetDoubleConv(32,32),
+            UNetDoubleConv(32,32),
+            UNetDoubleConv(32,32),
+            UNetDoubleConv(32,32,True),
+        ])
+        
+    def forward(self, x):
+        ens = []  # e0，e1, e2 ,e3, e4
+        y = x
+        for encoder in self.encoders:
+            y = encoder(y)
+            ens.append(y)
+            y = F.max_pool3d(y, 2, 2)
+        
+        y = ens[-1]
+        for i, decoder in enumerate(self.decoders):
+            enx = ens[-2-i]
+            dex = F.interpolate(y, size=enx.shape[2:],
+                                mode='trilinear', align_corners=True)
+            y = decoder(enx + dex)
+        return y
+    
+    def loss(self, func, y, p):
+        return func(y,p);
+    
+    
+class WaveUNetConv(nn.Module):
+    def __init__(self, inc=1, outc=2 ):
+        super().__init__()
+        self.c1 =  nn.Conv3d(inc, outc, 3, stride=1, padding=1)
+        self.c2 =  RWAE(outc, q=6, gama=0.2) 
+         
+    def forward(self, x):
+        y1 = self.c1(x)
+        y1 = F.relu(F.instance_norm(y1))
+        y = self.c2(y1) 
+        return y
+        
+
+    
+class WaveUNet(nn.Module):
+    def __init__(self, inc=1, outc=2, training=True):
+        super().__init__()
+        self.training = training
+
+        self.encoders = nn.ModuleList([
+            UNetDoubleConv(inc,32),
+            UNetDoubleConv(32,32),
+            UNetDoubleConv(32,32),
+            UNetDoubleConv(32,32),
+            UNetDoubleConv(32,32),
+        ])
+        
+        self.decoders = nn.ModuleList([
+            UNetDoubleConv(32,32),
+            UNetDoubleConv(32,32),
+            UNetDoubleConv(32,32),
+            UNetDoubleConv(32,32),
+        ])
+        
+        self.deep_supervision = nn.ModuleList([
+            nn.Sequential(nn.Conv3d(32, outc, 1, 1), nn.Softmax(dim=1)),
+            nn.Sequential(nn.Conv3d(32, outc, 1, 1), nn.Softmax(dim=1)),
+            nn.Sequential(nn.Conv3d(32, outc, 1, 1), nn.Softmax(dim=1)),
+            nn.Sequential(nn.Conv3d(32, outc, 1, 1), nn.Softmax(dim=1)),
+        ])
+        
+    def forward(self, x):
+        ens = []  # e0，e1, e2 ,e3, e4
+        y = x
+        for encoder in self.encoders:
+            y = encoder(y)
+            ens.append(y)
+            y = F.max_pool3d(y, 2, 2)
+        
+        y = ens[-1]
+        des = []
+        for i, decoder in enumerate(self.decoders):
+            enx = ens[-2-i]
+            dex = F.interpolate(y, size=enx.shape[2:],
+                                mode='trilinear', align_corners=True)
+            y = decoder(enx + dex)
+            des.append(y)
+        
+        outs = []  # o1, o2, o3, o4 -> d4, d3, d2, d1 -> e1, e2, e3, e4
+        for i, ds in enumerate(self.deep_supervision):
+            outs.append(ds(des[i]))
+ 
+        return outs
+
+
+    def loss(self, func, y, p, λ):
+        l = func(y, p[-1])
+        for pi in p:
+            l = l+func(y, pi)
+        return l
