@@ -18,4 +18,5 @@
 
 
 随机编码效果
+
 ![wave8](https://user-images.githubusercontent.com/33023091/220224965-e97ad1f7-cfb9-40f0-9f50-d95da02861cf.png)
