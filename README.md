@@ -1,3 +1,4 @@
+论文 [Wave Self-Attention Mechanism for Three-Dimensional Features](https://ieeexplore.ieee.org/abstract/document/10245724) 的官方实现
 奇异值分解的波注意力
 
 ![image](https://user-images.githubusercontent.com/33023091/218280149-6f7c67ef-eb25-4c05-841e-862ad64839c6.png)
@@ -20,3 +21,13 @@
 随机编码效果
 
 ![wave8](https://user-images.githubusercontent.com/33023091/220224965-e97ad1f7-cfb9-40f0-9f50-d95da02861cf.png)
+
+如有参考请引用
+@inproceedings{liu2023wave,
+  title={Wave Self-Attention Mechanism for Three-Dimensional Features},
+  author={Liu, Hao and Cheng, Yuanzhi and Li, Hui},
+  booktitle={2023 IEEE 6th International Conference on Electronic Information and Communication Technology (ICEICT)},
+  pages={22--27},
+  year={2023},
+  organization={IEEE}
+}
