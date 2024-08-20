@@ -25,7 +25,8 @@
 
 ![wave8](https://user-images.githubusercontent.com/33023091/220224965-e97ad1f7-cfb9-40f0-9f50-d95da02861cf.png)
 
-如有参考请引用
+# 引用
+```
 @inproceedings{liu2023wave,
   title={Wave Self-Attention Mechanism for Three-Dimensional Features},
   author={Liu, Hao and Cheng, Yuanzhi and Li, Hui},
@@ -34,3 +35,4 @@
   year={2023},
   organization={IEEE}
 }
+```
