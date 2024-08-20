@@ -1,5 +1,5 @@
 # 简介
-论文 [Wave Self-Attention Mechanism for Three-Dimensional Features, Publisher: IEEE ](https://ieeexplore.ieee.org/abstract/document/10245724) 的官方实现
+IEEE 论文 [Wave Self-Attention Mechanism for Three-Dimensional Features ](https://ieeexplore.ieee.org/abstract/document/10245724) 的官方实现
 
 # 模块介绍
 ## 奇异值分解的波注意力
