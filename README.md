@@ -1,5 +1,7 @@
 # 简介
-IEEE 论文 [Wave Self-Attention Mechanism for Three-Dimensional Features ](https://ieeexplore.ieee.org/abstract/document/10245724) 的官方实现。论文原文阅读：[CID144_UID7214_PID7349.pdf](CID144_UID7214_PID7349.pdf)
+IEEE 论文 [Wave Self-Attention Mechanism for Three-Dimensional Features ](https://ieeexplore.ieee.org/abstract/document/10245724) 的官方实现。
+
+论文下载：[CID144_UID7214_PID7349.pdf](CID144_UID7214_PID7349.pdf)
 
 
 # 模块介绍
