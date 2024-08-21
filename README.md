@@ -24,7 +24,7 @@ IEEE 论文 [Wave Self-Attention Mechanism for Three-Dimensional Features ](http
 ![image](https://user-images.githubusercontent.com/33023091/218280181-c64764b9-96e0-445b-86ca-96dc0eea16f2.png)
 
 
-## 随机编码效果
+## 随机编解码效果
 
 ![wave8](https://user-images.githubusercontent.com/33023091/220224965-e97ad1f7-cfb9-40f0-9f50-d95da02861cf.png)
 
